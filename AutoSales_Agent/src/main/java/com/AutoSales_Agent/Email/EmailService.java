@@ -153,22 +153,22 @@ public class EmailService {
 	        helper.setTo(to);
 	        helper.setSubject("[emailId:" + emailId + "] " + dto.getSubject());
 	        helper.setText(decoratedBody, true);
-	        helper.setFrom("sks02040204@gmail.com");
+	        helper.setFrom(System.getenv("MAIL_USERNAME"));
 	        
 	        mailSender.send(message);
-	        System.out.println("✅ 메일 전송 성공: " + to);
+	        System.out.println("메일 전송 성공: " + to);
 	        
 	        savedEmail.setSent(true);
 	        emailRepository.save(savedEmail);
 		}catch(Exception e){
-			 System.err.println("❌ 메일 전송 실패: " + e.getMessage());
+			 System.err.println("메일 전송 실패: " + e.getMessage());
 	         throw new RuntimeException("메일 전송 실패");
 		}
 	}
 	
 	//3시간마다 메일 자동으로 읽어옴.
 	//@Scheduled(cron = "0 0 7,10,13,15,17,18 * * *")
-	@Scheduled(fixedRate =1 * 60 * 1000)
+	@Scheduled(fixedRate =1 * 30 * 1000)
 	public void scheduleReceiveEmails() {
 	    System.out.println("[메일 수신]");
 	    receiveEmails();
